@@ -11,7 +11,6 @@ const app = express();
 app.use(require(path.join(__dirname, 'middleware', 'Compression.js')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.set('trust proxy', 1);
 app.use(require(path.join(__dirname, 'middleware', 'RequestLogger.js')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -28,6 +27,16 @@ app.use('/growtopia', require(path.join(__dirname,'routes', 'GrowtopiaGame.js'))
 
 // setting the static files
 app.use(express.static(path.join(__dirname, 'public')));
+
+// setting the 404 page
+app.use((req, res) => {
+    const currentTime = new Date().toISOString();
+    const clientIP = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || req.ip;
+    console.warn(
+        `[${req.get('host')}] ${clientIP} Missing File -> ${req.method} ${req.originalUrl} - ${currentTime}`,
+    );
+    res.status(200).send('404 Page Not Found');
+});
 
 // exposing the app
 module.exports = app;

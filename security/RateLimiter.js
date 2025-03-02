@@ -1,7 +1,7 @@
 const rateLimit = require('express-rate-limit');
 
 const RateLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 menit
+    windowMs: 1 * 60 * 1000, // 1 menit
     max: 500, // Batas 500 request per IP
     standardHeaders: true,
     legacyHeaders: false,
