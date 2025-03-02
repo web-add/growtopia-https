@@ -21,7 +21,6 @@ app.use(require(path.join(__dirname,'security', 'IPBlacklist.js')));
 app.use(require(path.join(__dirname,'security', 'RequestSizeLimiter.js')));
 app.use(require(path.join(__dirname,'security', 'RateLimiter.js')));
 app.use(require(path.join(__dirname,'security', 'XSSProtection.js')));
-app.use(require(path.join(__dirname,'security', 'RequestSanitizer.js')));
 
 // setting the routes
 app.use('/player', require(path.join(__dirname,'routes', 'GrowtopiaWebview.js')));
