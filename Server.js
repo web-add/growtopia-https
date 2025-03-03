@@ -28,7 +28,9 @@ const sniCallback = (serverName, callback) => {
 }
 
 const serverOptions = {
-	SNICallback: sniCallback,
+    SNICallback: sniCallback,
+    keepAliveTimeout: 60000, // 60 seconds
+    headersTimeout: 65000, // 65 seconds
 }
 
 // starting server with port 80

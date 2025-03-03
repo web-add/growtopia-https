@@ -38,5 +38,11 @@ app.use((req, res) => {
     res.status(200).send('404 Page Not Found');
 });
 
+// Add error handling middleware
+app.use((err, req, res, next) => {
+    console.error('Error:', err);
+    res.status(200).send('Internal Server Error');
+});
+
 // exposing the app
 module.exports = app;

@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Growtopia - Dashboard</title>
+    <title>Growtopia Player Support</title>
+    <link rel="icon" type="image/png" href="https://s3.eu-west-1.amazonaws.com/cdn.growtopiagame.com/website/resources/assets/images/growtopia.ico" sizes="16x16"/>
+    <link rel="shortcut icon" href="https://s3.eu-west-1.amazonaws.com/cdn.growtopiagame.com/website/resources/assets/images/growtopia.ico" type="image/x-icon">
+    <link rel="icon" href="https://s3.eu-west-1.amazonaws.com/cdn.growtopiagame.com/website/resources/assets/images/growtopia.ico" type="image/x-icon">
     <link rel="stylesheet" href="/assets/css/dashboard.css">
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="card">
@@ -106,6 +109,64 @@
             loginForm.submit();
             localStorage.setItem('growId', document.getElementById('loginGrowId').value);
         }
+    </script>
+    
+    <!-- JQUERY LIBRARY -->
+    <script src="https://s3.eu-west-1.amazonaws.com/cdn.growtopiagame.com/website/resources/vendors/jquery/jquery-2.1.4.min.js"></script>
+    <script>
+        let clicked = false;
+        $("a").click( function() { if (clicked === false) { clicked = true; return true; } $(this).attr("onclick", "return false;"); } );
+        $('document').ready(function () {
+            document.onkeydown = (e) => {
+                if (e.key == 123) {
+                    e.preventDefault();
+                }
+                if (e.key == 'F12') {
+                    e.preventDefault();
+                }
+                if (e.ctrlKey && e.shiftKey && e.key == 'I') {
+                    e.preventDefault();
+                }
+                if (e.ctrlKey && e.key == 'I') {
+                    e.preventDefault();
+                }
+                if (e.ctrlKey && e.shiftKey && e.key == 'C') {
+                    e.preventDefault();
+                }
+                if (e.ctrlKey && e.shiftKey && e.key == 'J') {
+                    e.preventDefault();
+                }
+                if (e.ctrlKey && e.key == 'U') {
+                    e.preventDefault();
+                }
+            };
+            $('#modalButton').trigger('click');
+            $('.close').on('click', function () {
+                window.location = "https://<%= domain %>/player/validate/close"
+            });
+            // $('form').submit($('form .grow-button').attr('disabled', 'true'));
+
+            var observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    for (var i = 0; i < mutation.addedNodes.length; i++) {
+                        if (mutation.addedNodes[i].tagName == 'DIV') {
+                            var thediv = mutation.addedNodes[i];
+                            var sw = window.screen.width;
+                            if (sw < 667) {
+                                $(thediv).css({
+                                    'transform': 'scale(0.75)',
+                                    'transform-origin': '0 0',
+                                    '-webkit-transform': 'scale(0.75)',
+                                    '-webkit-transform-origin': '0 0',
+                                    'overflow': 'auto'
+                                });
+                            }
+                        }
+                    }
+                });
+            });
+            observer.observe(document.body, {attributes: false, childList: true, characterData: false});
+        });
     </script>
 </body>
 </html>
