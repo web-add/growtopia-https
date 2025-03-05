@@ -1,6 +1,6 @@
 module.exports = {
     // your server name
-    server_name: "GrowPlus",
+    server_name: "GTPS",
     // public ipv4
     server_ip: "127.0.0.1",
     // UDP port

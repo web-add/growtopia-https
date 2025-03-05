@@ -1,6 +1,6 @@
 // importing the necessary modules
 const path = require('path');
-const cnf = require(path.join(__dirname, '..', 'Config.js'));
+const cnf = require(path.join(__dirname, '..', '..', 'Config.js'));
 const express = require('express');
 const router = express.Router();
 

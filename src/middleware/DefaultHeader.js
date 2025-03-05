@@ -22,12 +22,6 @@ const RequestLogger = async (req, res, next) => {
     req.setTimeout(30000); // 30 seconds timeout
     res.setTimeout(30000); // 30 seconds timeout
 
-    const currentTime = new Date().toISOString();
-    const clientIP = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || req.ip;
-    console.log(
-        `[${req.get('host')}] ${clientIP} -> ${req.method} ${req.originalUrl} - ${currentTime}`,
-    );
-
     // passing the request to the next handler
     next();
 };

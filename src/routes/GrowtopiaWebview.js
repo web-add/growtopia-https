@@ -1,5 +1,5 @@
 const express = require('express');
-const { server_name, loginurl } = require('../Config');
+const { server_name, loginurl } = require('../../Config');
 
 const router = express.Router();
 

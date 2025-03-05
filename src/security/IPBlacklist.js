@@ -20,10 +20,10 @@ const ipBlacklist = (req, res, next) => {
         const activity = suspiciousActivities.get(clientIP);
         const timeDiff = Date.now() - activity.timestamp;
 
-        // If more than 100 requests within 10 seconds
+        // If more than 500 requests within 10 seconds
         if (timeDiff < 10000) {
             activity.count++;
-            if (activity.count > 100) {
+            if (activity.count > 500) {
                 blacklistedIPs.add(clientIP);
                 return res.status(403).send('IP has been blacklisted');
             }

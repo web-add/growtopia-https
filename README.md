@@ -27,7 +27,7 @@ git clone https://github.com/GTPSHAX/growtopia-https.git
 ```
 2. Navigate to the project directory:
 ```bash
-cd growtopia-https
+cd growtopia-https/src
 ```
 3. Install dependencies:
 ```bash
@@ -51,13 +51,15 @@ or use the provided batch file:
 ## Project Structure
 ```plaintext
 growtopia-https/
-├── certs/               # SSL Certificates
-├── middleware/          # Express middleware
+├── certs/              # SSL Certificates
 ├── public/             # Static files
-├── routes/             # Route handlers
-├── security/           # Security configurations
-├── views/              # EJS templates
-└── MainApp.js          # Main application file
+├── src/                # Source code
+│   ├── MainApp.js      # Main application file
+│   └── package.json    # Project dependencies
+├── middleware/         # Express middleware
+├── routes/            # Route handlers
+├── security/          # Security configurations
+└── views/             # EJS templates
  ```
  
 ## Features Details
