@@ -3,7 +3,11 @@ const express = require('express');
 const CacheHandler = (req, res, next) => {
     if (req.path.startsWith('/cache/')) {
         // Remove any compression-related headers
-        res.removeHeader('Content-Encoding');
+        if (req.get('host') == 'www.growtopia1.com') {
+            res.removeHeader('Content-Encoding');
+            res.removeHeader('Transfer-Encoding');
+        }
+        
         // Setting response headers
         res.set({
             'Accept-Ranges': 'bytes',

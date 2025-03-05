@@ -29,8 +29,14 @@ app.use('/growtopia', require(path.join(__dirname,'routes', 'GrowtopiaGame.js'))
 // setting the static files
 app.use(express.static(path.join(__dirname, '..', 'public'), {
     setHeaders: (res, path) => {
+        // Remove automatic Content-Length setting for cached files
         if (path.includes('/cache/')) {
-            res.set('Content-Length', '398');
+            // Remove Content-Length header if Transfer-Encoding is present
+            res.removeHeader('Content-Length');
+            // Ensure proper content type for RTTEX files
+            if (path.endsWith('.rttex')) {
+                res.set('Content-Type', 'application/octet-stream');
+            }
         }
     }
 }));
