@@ -27,7 +27,7 @@ app.use('/player', require(path.join(__dirname,'routes', 'GrowtopiaWebview.js'))
 app.use('/growtopia', require(path.join(__dirname,'routes', 'GrowtopiaGame.js')));
 
 // setting the static files
-app.use(express.static(path.join(__dirname, 'public'), {
+app.use(express.static(path.join(__dirname, '..', 'public'), {
     setHeaders: (res, path) => {
         if (path.includes('/cache/')) {
             res.set('Content-Length', '398');
