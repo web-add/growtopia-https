@@ -55,11 +55,11 @@ growtopia-https/
 ├── public/             # Static files
 ├── src/                # Source code
 │   ├── MainApp.js      # Main application file
-│   └── package.json    # Project dependencies
-├── middleware/         # Express middleware
-├── routes/            # Route handlers
-├── security/          # Security configurations
-└── views/             # EJS templates
+│   ├── package.json    # Project dependencies
+│   ├── middleware/     # Express middleware
+│   ├── routes/         # Route handlers
+│   └── security/       # Security configurations
+└── Config.js           # Configuration file
  ```
  
 ## Features Details
