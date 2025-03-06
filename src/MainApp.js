@@ -23,7 +23,8 @@ app.use(require(path.join(__dirname,'security', 'RateLimiter.js')));
 app.use(require(path.join(__dirname,'security', 'XSSProtection.js')));
 
 // setting the routes
-app.use('/player', require(path.join(__dirname,'routes', 'GrowtopiaWebview.js')));
+app.use('/', require(path.join(__dirname,'routes', 'IndexRoute.js')));
+app.use('/player', require(path.join(__dirname,'routes', 'PlayerSupport.js')));
 app.use('/growtopia', require(path.join(__dirname,'routes', 'GrowtopiaGame.js')));
 
 // setting the static files
