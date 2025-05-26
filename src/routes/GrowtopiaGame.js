@@ -10,6 +10,7 @@ port|${cnf.server_port}
 type|1
 #maint|lorem ipsum dolor sit amet
 loginurl|${cnf.loginurl}
+type2|${cnf.type2 ? "1" : "0"}
 meta|${cnf.meta}
 RTENDMARKERBS1001`;
     res.send(content);

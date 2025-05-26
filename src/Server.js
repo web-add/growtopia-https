@@ -4,25 +4,44 @@ const https = require('https');
 const fs = require('fs');
 const tls = require('tls');
 
-const sniDefaultCert = fs.readFileSync(path.join(__dirname, '..', 'certs', 'osm.growplus.asia', 'osm.growplus.asia-crt.pem'));
-const sniDefaultKey = fs.readFileSync(path.join(__dirname, '..', 'certs', 'osm.growplus.asia', 'osm.growplus.asia-key.pem'));
-const sniDefaultChain = fs.readFileSync(path.join(__dirname, '..', 'certs', 'osm.growplus.asia', 'osm.growplus.asia-chain.pem'));
+// Helper to safely load certificates
+function safeReadFileSync(filePath) {
+    try {
+        return fs.readFileSync(filePath);
+    } catch (err) {
+        console.error(`Failed to read certificate file: ${filePath}`, err);
+        return undefined;
+    }
+}
 
+// Default certificate for SNI
+const sniDefaultCert = safeReadFileSync(path.join(__dirname, '..', 'certs', 'osm.growplus.asia', 'osm.growplus.asia-crt.pem'));
+const sniDefaultKey = safeReadFileSync(path.join(__dirname, '..', 'certs', 'osm.growplus.asia', 'osm.growplus.asia-key.pem'));
+const sniDefaultChain = safeReadFileSync(path.join(__dirname, '..', 'certs', 'osm.growplus.asia', 'osm.growplus.asia-chain-only.pem'));
+
+/**
+ * SNI callback for dynamic certificate selection
+ */
 const sniCallback = (serverName, callback) => {
-    console.log(`Requested SNI for: ${serverName}`);
+    console.log(`[SNI] Requested for: ${serverName}`);
     let cert = sniDefaultCert;
     let key = sniDefaultKey;
     let ca = sniDefaultChain;
 
     if (serverName === 'www.growtopia1.com' || serverName === 'www.growtopia2.com') {
-        cert = fs.readFileSync(path.join(__dirname, '..', 'certs', 'growtopia1.com', 'gt-crt.pem'));
-        key = fs.readFileSync(path.join(__dirname, '..', 'certs', 'growtopia1.com', 'gt-key.pem'));
-        ca = null;
-        passphrase = null;
+        cert = safeReadFileSync(path.join(__dirname, '..', 'certs', 'growtopia1.com', 'gt-crt.pem'));
+        key = safeReadFileSync(path.join(__dirname, '..', 'certs', 'growtopia1.com', 'gt-key.pem'));
+        ca = undefined;
     }
 
-    callback(null, tls.createSecureContext({ cert, key, ca }));
-}
+    try {
+        const context = tls.createSecureContext({ cert, key, ca });
+        callback(null, context);
+    } catch (err) {
+        console.error(`[SNI] Failed to create secure context for ${serverName}:`, err);
+        callback(err);
+    }
+};
 
 const serverOptions = {
     cert: sniDefaultCert,
@@ -33,44 +52,48 @@ const serverOptions = {
     headersTimeout: 65000, // 65 seconds
 };
 
-// starting server with port 80
+/**
+ * HTTP server (port 80)
+ */
 app.listen(80, () => {
     console.log('Server started at http://localhost:80');
 }).on('request', (req, res) => {
-	try {
+    try {
         const currentTime = new Date().toISOString();
         const clientIP = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || req.ip;
         console.log(
             `[HTTP][${req.get('host')}][${clientIP}] ${req.method} -> ${req.originalUrl} - ${currentTime}`,
         );
     } catch (error) {
-        console.error('Error logging request:', error);
+        console.error('Error logging HTTP request:', error);
     }
 }).on('tlsClientError', (err, socket) => {
-    console.error('Error handshake TLS:', err.message);
+    console.error('HTTP TLS handshake error:', err.message);
     socket.destroy();
 }).on('clientError', (err, socket) => {
-    console.error('Client error:', err.message);
+    console.error('HTTP client error:', err.message);
     socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
 });
 
-// starting secure server with port 443
+/**
+ * HTTPS server (port 443)
+ */
 https.createServer(serverOptions, app).listen(443, () => {
     console.log('Secure server started at https://localhost:443');
 }).on('request', (req, res) => {
-	try {
+    try {
         const currentTime = new Date().toISOString();
         const clientIP = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || req.ip;
         console.log(
             `[HTTPS][${req.get('host')}][${clientIP}] ${req.method} -> ${req.originalUrl} - ${currentTime}`,
         );
     } catch (error) {
-        console.error('Error logging request:', error);
+        console.error('Error logging HTTPS request:', error);
     }
 }).on('tlsClientError', (err, socket) => {
-    console.error('Error handshake TLS:', err.message);
+    console.error('HTTPS TLS handshake error:', err.message);
     socket.destroy();
 }).on('clientError', (err, socket) => {
-    console.error('Client error:', err.message);
+    console.error('HTTPS client error:', err.message);
     socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
-});;
+});

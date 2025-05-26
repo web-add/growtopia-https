@@ -6,7 +6,9 @@ module.exports = {
     // UDP port
     server_port: 17091,
     // login url dashboard
-    loginurl: "login.cdngtps.my.id",
+    loginurl: "osm.growplus.asia",
+    // for new server header
+    type2: true,
     // meta
     meta: "name=GrowPlus&ip=127.0.0.1&port=17091&3rd=0",
 }
